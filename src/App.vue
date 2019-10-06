@@ -34,6 +34,7 @@ export default {
   mounted () {
     axios.get('http://localhost:8090/getTodos')
       .then((res) => {
+        console.log()
         this.todos = res.data
       })
   },
