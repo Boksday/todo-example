@@ -1,6 +1,6 @@
 <template>
     <div class="input-wrapper">
-      <input id="todoInput"
+      <input ref="todoInput"
              type="text"
              v-model="todo"
              @keypress.enter="addTodo"
@@ -11,7 +11,10 @@
 <script>
 import axios from 'axios'
 export default {
-  props: ['todos'],
+  // props 타입까지 명시
+  props: {
+    todos: Array
+  },
   data () {
     return {
       todo: ''
@@ -37,7 +40,8 @@ export default {
       } else {
         alert('입력칸이 비어있습니다')
       }
-      document.getElementById('todoInput').focus()
+      // ref로 바꿔보기
+      this.$refs.todoInput.focus()
     }
   }
 }

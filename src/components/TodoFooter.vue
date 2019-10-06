@@ -16,7 +16,10 @@ const CONST_TEXT = {
   'notYet': '아직 못한 일'
 }
 export default {
-  props: ['todos'],
+  // props 타입까지 명시
+  props: {
+    todos: Array
+  },
   data () {
     return {
       text: CONST_TEXT.all

@@ -23,7 +23,12 @@
 <script>
 import axios from 'axios'
 export default {
-  props: ['td', 'index', 'todos'],
+  // props 타입까지 명시
+  props: {
+    td: Object,
+    index: Number,
+    todos: Array
+  },
   data () {
     return {
       updateMode: false,

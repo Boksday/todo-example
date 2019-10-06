@@ -1,30 +1,31 @@
 <template>
   <div id="app">
     <div class="title">Todos</div>
-    <input-component :todos="todos"></input-component>
+    <todo-input :todos="todos"></todo-input>
     <div class="todos-wrapper">
-      <todo-component v-for="(td,index) in todos"
+      <todo-element v-for="(td,index) in todos"
                       :key="index"
                       :td="td"
                       :index="index"
-                      :todos="todos"></todo-component>
+                      :todos="todos"></todo-element>
     </div>
-    <footer-component :todos="todos"
+    <todo-footer :todos="todos"
                       @completeTodo="completeTodo"
                       @notYetTodo="notYetTodo"
-                      @allTodo="allTodo"></footer-component>
+                      @allTodo="allTodo"></todo-footer>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import TodoComponent from './components/TodoComponent'
-import InputComponent from './components/InputComponent'
-import FooterComponent from './components/FooterComponent'
+// 컴포넌트 네이밍 변경
+import TodoElement from './components/TodoElement'
+import TodoInput from './components/TodoInput'
+import TodoFooter from './components/TodoFooter'
 
 export default {
   components: {
-    TodoComponent, InputComponent, FooterComponent
+    TodoElement, TodoInput, TodoFooter
   },
   data () {
     return {
@@ -34,7 +35,6 @@ export default {
   mounted () {
     axios.get('http://localhost:8090/getTodos')
       .then((res) => {
-        console.log()
         this.todos = res.data
       })
   },
