@@ -29,11 +29,8 @@ export default {
     })
   },
   methods: {
-    ...mapActions({
-      completeTodo: 'completeTodo',
-      notYetTodo: 'notYetTodo',
-      allTodo: 'allTodo'
-    })
+    // mapActions 선언방식 수정
+    ...mapActions(['completeTodo', 'notYetTodo', 'allTodo'])
   }
 }
 </script>

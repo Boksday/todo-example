@@ -16,6 +16,7 @@ export default new Vuex.Store({
     },
     setTodo (state, payload) {
       state.todos[payload.index].text = payload.text
+      console.log(state.todos[payload.index])
     },
     checkTodo (state, payload) {
       state.todos[payload.index].checked = !state.todos[payload.index].checked

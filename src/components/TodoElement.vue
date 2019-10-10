@@ -27,19 +27,23 @@ export default {
   props: {
     index: Number
   },
-  computed: {
-    ...mapState({
-      todos: (store) => store.todos
-    })
-  },
+
   data () {
     return {
       updateMode: false,
       updateText: ''
     }
   },
+  computed: {
+    ...mapState({
+      todos: (store) => store.todos
+    }),
+    todo () {
+      return this.todos[this.index]
+    }
+  },
   mounted () {
-    this.updateText = this.todos[this.index].text
+    this.updateText = this.todo.text
   },
   methods: {
     ...mapActions(['checkTodo', 'updateOkTodo', 'delete']),
@@ -49,7 +53,7 @@ export default {
     updateOk () {
       this.updateOkTodo({
         text: this.updateText,
-        no: this.todos[this.index].no,
+        no: this.todo.no,
         index: this.index
       }).then(() => {
         this.updateMode = !this.updateMode
@@ -57,14 +61,14 @@ export default {
     },
     clickTodo () {
       this.checkTodo({
-        no: this.todos[this.index].no,
-        checked: !this.todos[this.index].checked,
+        no: this.todo.no,
+        checked: !this.todo.checked,
         index: this.index
       })
     },
     deleteTodo () {
       this.delete({
-        no: this.todos[this.index].no, index: this.index
+        no: this.todo.no, index: this.index
       })
     }
   }
