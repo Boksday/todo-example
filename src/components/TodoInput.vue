@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapActions } from 'vuex'
 export default {
   // props 타입까지 명시
   props: {
@@ -21,22 +21,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['add']),
     addTodo () {
       if (this.todo) {
-        axios.get('http://localhost:8090/addTodo', {
-          params: {
-            text: this.todo,
-            checkced: false
-          }
-        })
-          .then((res) => {
-            this.todos.push({
-              no: res.data,
-              text: this.todo,
-              checked: false
-            })
-            this.todo = ''
-          })
+        this.add(this.todo)
+        this.todo = ''
       } else {
         alert('입력칸이 비어있습니다')
       }
@@ -54,4 +43,9 @@ export default {
     input::placeholder{
         color: #e2e2e2
     }
+    input {
+      width: 500px;
+      height: 30px;
+      font-size: 16px;
+  }
 </style>
