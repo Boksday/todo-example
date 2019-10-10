@@ -1,61 +1,35 @@
 <template>
   <div id="app">
     <div class="title">Todos</div>
-    <input-component :todos="todos"></input-component>
+    <todo-input :todos="todos"></todo-input>
     <div class="todos-wrapper">
-      <todo-component v-for="(td,index) in todos"
+      <todo-element v-for="(_,index) in todos"
                       :key="index"
-                      :td="td"
-                      :index="index"
-                      :todos="todos"></todo-component>
+                      :index="index">
+      </todo-element>
     </div>
-    <footer-component :todos="todos"
-                      @completeTodo="completeTodo"
-                      @notYetTodo="notYetTodo"
-                      @allTodo="allTodo"></footer-component>
+    <todo-footer></todo-footer>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import TodoComponent from './components/TodoComponent'
-import InputComponent from './components/InputComponent'
-import FooterComponent from './components/FooterComponent'
+// 컴포넌트 네이밍 변경
+import TodoElement from './components/TodoElement'
+import TodoInput from './components/TodoInput'
+import TodoFooter from './components/TodoFooter'
+import { mapState } from 'vuex'
 
 export default {
   components: {
-    TodoComponent, InputComponent, FooterComponent
+    TodoElement, TodoInput, TodoFooter
   },
-  data () {
-    return {
-      todos: []
-    }
+  computed: {
+    ...mapState({
+      todos: (store) => store.todos
+    })
   },
   mounted () {
-    axios.get('http://localhost:8090/getTodos')
-      .then((res) => {
-        this.todos = res.data
-      })
-  },
-  methods: {
-    completeTodo () {
-      axios.get('http://localhost:8090/completeTodo')
-        .then((res) => {
-          this.todos = res.data
-        })
-    },
-    notYetTodo () {
-      axios.get('http://localhost:8090/notYetTodo')
-        .then((res) => {
-          this.todos = res.data
-        })
-    },
-    allTodo () {
-      axios.get('http://localhost:8090/getTodos')
-        .then((res) => {
-          this.todos = res.data
-        })
-    }
+    this.$store.dispatch('allTodo')
   }
 }
 </script>
@@ -66,11 +40,6 @@ export default {
     font-weight: bold;
   }
 
-  #todoInput {
-    width: 500px;
-    height: 30px;
-    font-size: 16px;
-  }
   button{
     cursor: pointer
   }

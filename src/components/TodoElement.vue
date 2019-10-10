@@ -1,10 +1,10 @@
 <template>
-    <div @click="checkTodo"
+    <div @click="clickTodo"
          class="todos"
-         :class="{'end-todo': td.checked}">
+         :class="{'end-todo': todos[index].checked}">
         <div class="td">
             <span v-if="!updateMode">
-                {{td.text}}
+                {{todos[index].text}}
                 <button @click.stop="toggleUpdateMode">수정</button>
             </span>
             <span v-else>
@@ -21,47 +21,55 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapState, mapActions } from 'vuex'
 export default {
-  props: ['td', 'index', 'todos'],
+  // props 타입까지 명시
+  props: {
+    index: Number
+  },
+
   data () {
     return {
       updateMode: false,
-      updateText: this.td.text
+      updateText: ''
     }
   },
+  computed: {
+    ...mapState({
+      todos: (store) => store.todos
+    }),
+    todo () {
+      return this.todos[this.index]
+    }
+  },
+  mounted () {
+    this.updateText = this.todo.text
+  },
   methods: {
+    ...mapActions(['checkTodo', 'updateOkTodo', 'delete']),
     toggleUpdateMode () {
       this.updateMode = !this.updateMode
     },
     updateOk () {
-      let params = {
+      this.updateOkTodo({
         text: this.updateText,
-        no: this.td.no
-      }
-      axios.get('http://localhost:8090/updateTodo', { params })
-        .then((res) => {
-          this.td.text = this.updateText
-          this.updateText = this.td.text
-          this.updateMode = !this.updateMode
-        })
+        no: this.todo.no,
+        index: this.index
+      }).then(() => {
+        this.updateMode = !this.updateMode
+      })
     },
-    checkTodo () {
-      let params = {
-        no: this.td.no,
-        checked: !this.td.checked
-      }
-      axios.get('http://localhost:8090/clickTodo', { params })
-        .then((res) => {
-          this.td.checked = !this.td.checked
-        })
-      console.log(this.td.checked)
+    clickTodo () {
+      this.checkTodo({
+        no: this.todo.no,
+        checked: !this.todo.checked,
+        index: this.index
+      })
     },
     deleteTodo () {
-      axios.get('http://localhost:8090/deleteTodo', { params: { no: this.td.no } })
-        .then((res) => {
-          this.todos.splice(this.index, 1)
-        })
+      this.delete({
+        no: this.todo.no, index: this.index
+      })
     }
   }
 }

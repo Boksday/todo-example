@@ -10,31 +10,27 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 const CONST_TEXT = {
   'all': '전체 할 일',
   'complete': '완료된 일',
   'notYet': '아직 못한 일'
 }
 export default {
-  props: ['todos'],
+  // props 타입까지 명시
   data () {
     return {
       text: CONST_TEXT.all
     }
   },
+  computed: {
+    ...mapState({
+      todos: store => store.todos
+    })
+  },
   methods: {
-    completeTodo () {
-      this.$emit('completeTodo')
-      this.text = CONST_TEXT.complete
-    },
-    notYetTodo () {
-      this.$emit('notYetTodo')
-      this.text = CONST_TEXT.notYet
-    },
-    allTodo () {
-      this.$emit('allTodo')
-      this.text = CONST_TEXT.all
-    }
+    // mapActions 선언방식 수정
+    ...mapActions(['completeTodo', 'notYetTodo', 'allTodo'])
   }
 }
 </script>

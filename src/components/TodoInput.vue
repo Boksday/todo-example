@@ -1,6 +1,6 @@
 <template>
     <div class="input-wrapper">
-      <input id="todoInput"
+      <input ref="todoInput"
              type="text"
              v-model="todo"
              @keypress.enter="addTodo"
@@ -9,35 +9,28 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapActions } from 'vuex'
 export default {
-  props: ['todos'],
+  // props 타입까지 명시
+  props: {
+    todos: Array
+  },
   data () {
     return {
       todo: ''
     }
   },
   methods: {
+    ...mapActions(['add']),
     addTodo () {
       if (this.todo) {
-        axios.get('http://localhost:8090/addTodo', {
-          params: {
-            text: this.todo,
-            checkced: false
-          }
-        })
-          .then((res) => {
-            this.todos.push({
-              no: res.data,
-              text: this.todo,
-              checked: false
-            })
-            this.todo = ''
-          })
+        this.add(this.todo)
+        this.todo = ''
       } else {
         alert('입력칸이 비어있습니다')
       }
-      document.getElementById('todoInput').focus()
+      // ref로 바꿔보기
+      this.$refs.todoInput.focus()
     }
   }
 }
@@ -50,4 +43,9 @@ export default {
     input::placeholder{
         color: #e2e2e2
     }
+    input {
+      width: 500px;
+      height: 30px;
+      font-size: 16px;
+  }
 </style>
